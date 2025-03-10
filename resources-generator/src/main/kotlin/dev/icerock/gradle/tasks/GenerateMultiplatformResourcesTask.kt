@@ -117,7 +117,7 @@ abstract class GenerateMultiplatformResourcesTask : DefaultTask() {
     abstract val outputAssetsDir: DirectoryProperty
 
     private val kotlinPlatformType: KotlinPlatformType
-        get() = KotlinPlatformType.valueOf(platformType.get())
+        get() = determinePlatformType()
 
     private val kotlinKonanTarget: KonanTarget
         get() {
@@ -168,6 +168,13 @@ abstract class GenerateMultiplatformResourcesTask : DefaultTask() {
         }
 
         outputMetadataFile.get().asFile.writeText(json.encodeToString(serializer, outputMetadata))
+    }
+
+    private fun determinePlatformType() {
+         when(sourceSetName.get()) {
+            "androidMain" -> KotlinPlatformType.androidJvm
+            else -> KotlinPlatformType.valueOf(platformType.get())
+         }
     }
 
     private fun createGenerator(): ResourcesGenerator {
