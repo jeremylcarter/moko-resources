@@ -170,8 +170,8 @@ abstract class GenerateMultiplatformResourcesTask : DefaultTask() {
         outputMetadataFile.get().asFile.writeText(json.encodeToString(serializer, outputMetadata))
     }
 
-    private fun determinePlatformType() {
-         when(sourceSetName.get()) {
+    private fun determinePlatformType(): KotlinPlatformType {
+         return when(sourceSetName.get()) {
             "androidMain" -> KotlinPlatformType.androidJvm
             else -> KotlinPlatformType.valueOf(platformType.get())
          }
